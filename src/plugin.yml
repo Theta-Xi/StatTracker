@@ -1,0 +1,8 @@
+name: StatTracker
+author: jtrenaud1s
+main: me.jtrenaud1s.stattracker.StatTracker
+version: 1.0
+commands:
+  stats:
+    description: "Displays your personal stats for this session"
+    usage: "/<command>"
