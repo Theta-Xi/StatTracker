@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="StatTracker">
-    <output-path>$PROJECT_DIR$/out/artifacts/StatTracker</output-path>
-    <root id="archive" name="StatTracker.jar">
-      <element id="module-output" name="StatTracker" />
-    </root>
-  </artifact>
-</component>
