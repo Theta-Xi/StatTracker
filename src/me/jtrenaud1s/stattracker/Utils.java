@@ -1,34 +1,41 @@
 package me.jtrenaud1s.stattracker;
 
 import com.mojang.authlib.GameProfile;
+import me.jtrenaud1s.stattracker.api.NMS;
+import me.jtrenaud1s.stattracker.api.v1_13_R2.CNMS;
+import me.jtrenaud1s.stattracker.api.v1_13_R2.EntityNPC;
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class Utils {
-    public static EntityPlayer createNPC(Location loc) {
-        MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
 
-        EntityPlayer entity = new EntityPlayer(nmsServer, nmsWorld,
-                new GameProfile(UUID.randomUUID(), "NPC"),
-                new PlayerInteractManager(nmsWorld));
+    public static NMS nms;
+    private static boolean isInit = false;
 
-        entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        entity.setHealth(20F);
+    public static void init() {
+        if(!isInit){
+        String version;
 
-        for(Player target : Bukkit.getOnlinePlayers()) {
-            PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
-            connection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entity));
-            connection.sendPacket(new PacketPlayOutNamedEntitySpawn(entity));
+            try {
+                version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            } catch (ArrayIndexOutOfBoundsException whatVersionAreYouUsingException) {
+                return;
+            }
+
+            if (version.equals("v1_13_R2")) {
+                nms = new CNMS();
+                isInit = true;
+            }
         }
+    }
 
-        return entity;
+    public static void createNPC(Location loc) {
+        init();
+        nms.spawnNPC(loc);
     }
 }

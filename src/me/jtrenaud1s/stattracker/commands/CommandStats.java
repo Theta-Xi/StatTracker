@@ -24,7 +24,7 @@ public class CommandStats implements CommandExecutor {
                 if(strings.length == 0){
                 PlayerStat stats = plugin.getStatManager().getPlayerStats(sender);
 
-                String message = ChatColor.YELLOW + "-------------------- [Your Stats] --------------------";
+                String message = ChatColor.YELLOW + "-------------------- [Your Stats] --------------------\n";
                 message += ChatColor.BLUE + "Kills: " + ChatColor.GREEN + stats.getKills() + "\n";
                 message += ChatColor.BLUE + "Deaths: " + ChatColor.GREEN + stats.getDeaths() + "\n";
                 message += ChatColor.BLUE + "K/D: " + ChatColor.GREEN + (stats.getDeaths() > 0 ? (((double)stats.getKills())/((double)stats.getDeaths())) : stats.getKills()) + "\n";

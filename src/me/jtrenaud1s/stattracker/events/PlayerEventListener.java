@@ -32,13 +32,19 @@ public class PlayerEventListener implements Listener {
 
     @EventHandler
     public void onPlayerKillPlayerEvent(PlayerDeathEvent event) {
+        if(!plugin.getStatManager().contains(event.getEntity()))
+            plugin.getStatManager().addPlayer(event.getEntity());
         plugin.getStatManager().getPlayerStats(event.getEntity()).addDeath();
-        PlayerStat killer = plugin.getStatManager().getPlayerStats(event.getEntity().getKiller());
-        killer.addKill();
+        if(event.getEntity().getKiller() instanceof Player){
+            if(!plugin.getStatManager().contains(event.getEntity().getKiller()))
+                plugin.getStatManager().addPlayer(event.getEntity().getKiller());
+            PlayerStat killer = plugin.getStatManager().getPlayerStats(event.getEntity().getKiller());
+            killer.addKill();
 
-        if(killer.getStreak() % 5 == 0) {
-            for(Player p : plugin.getServer().getOnlinePlayers()) {
-                p.sendMessage(ChatColor.GREEN + "" + event.getEntity().getKiller().getName() + " is on a " + killer.getStreak() + " kill streak!");
+            if(killer.getStreak() % 5 == 0) {
+                for(Player p : plugin.getServer().getOnlinePlayers()) {
+                    p.sendMessage(ChatColor.GREEN + "" + event.getEntity().getKiller().getName() + " is on a " + killer.getStreak() + " kill streak!");
+                }
             }
         }
     }
